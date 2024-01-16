@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>Liste des logements</h1>
+       
+        <div>
+            <a class="btn btn-primary mt-4" href="{{ path('app_logement_new') }}">Creer un logement</a>
+        </div>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Code</th>
+                    <th>Nom</th>
+                    <th>Capacite</th>
+                    <th>Type</th>
+                    <th>Lieu</th>
+                    <th>Photo</th>
+                    <th>Disponibilite</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for logement in logements %}
+                <tr>
+                    <td>{{ logement.id }}</td>
+                    <td>{{ logement.code }}</td>
+                    <td>{{ logement.nom }}</td>
+                    <td>{{ logement.capacite }}</td>
+                    <td>{{ logement.type }}</td>
+                    <td>{{ logement.lieu }}</td>
+                    {% if logement.photo is not empty %}
+                        <td> <img style="width: 80px; height: 70px;" src="{{asset('uploads/photo/'~ logement.photo )}}" alt="photo"> </td>
+                    {% else %}
+                        <td>non trouvé</td>                        
+                    {% endif %}
+                        <td>{{ logement.disponibilite ? 'Oui' : 'Non' }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('app_logement_edit', {'id': logement.id}) }}">Editer</a>
+                        <a class="btn btn-danger" href="{{ path('app_logement_delete', {'id': logement.id}) }}">sans modal</a>
+                        <button type="button" class="btn btn-danger supprimerlogement" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ logement.id }}">Supprimer</button>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(logements) }}
+        </div>
+    </div>
+    {{ include('_modal_delete.html.twig') }}
+    <script src="{{ asset('js/supprimermodal.js') }}"></script>
+{% endblock %}

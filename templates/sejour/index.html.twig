@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sejour index{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+            {% if not sejours.items is same as ([]) %}
+            <h1>Liste des Sejours</h1>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <a class="btn btn-primary offset-10 col-2" href="{{ path('app_sejour_new') }}">+ Creer un sejour</a>
+            </div>
+            <table class="table text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        {# <th>Debut</th>
+                        <th>Fin</th> #}
+                        <th>Nom du logement</th> 
+                        <th>Nom du voyageur</th> 
+                        <th>Prenom du voyageur</th> 
+                        <th>Image de logement</th> 
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for sejour in sejours %}
+                    <tr>
+                        <td>{{ sejour.id }}</td>
+                        <td>{{ sejour.logement.nom }}</td>
+                        <td>{{ sejour.voyageur.nom }}</td>
+                        <td>{{ sejour.voyageur.prenom }}</td>
+                        {% if sejour.logement.photo is not empty %}
+                            <td><img style="width: 80px; height: 70px;" src="{{asset('uploads/photo/'~ sejour.logement.photo )}}" alt="photo"></td>
+                        {% else %}
+                            <td>non trouvé</td>                        
+                        {% endif %}
+
+                        {# <td>{{ sejour.debut ? sejour.debut|date('Y-m-d') : '' }}</td>
+                        <td>{{ sejour.fin ? sejour.fin|date('Y-m-d') : '' }}</td> #}
+                        <td>
+                            <a class="btn btn-success" href="{{ path('app_sejour_edit', {'id': sejour.id}) }}">Modifier</a>
+                            <button type="button" class="btn btn-danger supprimersejour" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ sejour.id }}">Supprimer</button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center">
+                {{ knp_pagination_render(sejours) }}
+            </div>
+        {% else %}
+            <a href="" class="btn btn-primary">
+                Enregistrer un sejour
+            </a>
+            <h4>
+                Il n'y a pas de sejour
+            </h4>
+        {% endif %}
+    </div>
+
+    {{ include('_modal_delete.html.twig') }}
+    <script src="{{ asset('js/supprimermodal.js') }}"></script>
+{% endblock %}

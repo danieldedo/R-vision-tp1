@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sejour index{% endblock %}
+
+{% block body %}
+   <div class="container mt-5">
+        <fieldset class="border border-black p-2">
+            <legend class="float-none w-auto p-2" style="left: 100px;">Rechercher les sejours d'un client</legend>
+                
+            <form action="{{ path('app_sejour_search') }}" method="post">
+                <div class="container">
+                    <div class="form group row">
+                        <div class="col-sm-2 col-form-label">
+                            <label for="name" class="form-label">Search</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control " name="name" id="">
+                        </div
+                    </div>
+                    <div class="row m-2">
+                        <label class="col-1">Envoyer</label>
+                        <button type="submit" class="offset-1 col-2 btn btn-primary">{{ button_label|default('OK') }}</button>
+                    </div>
+                </div>
+            </form>
+
+        </fieldset>
+        <br>
+        <h1>Liste des sejours du voyageur</h1>
+        <table class="table my-5">
+            <thead>
+                <tr class="text-center">
+                    {# <th class="text-decoration-underline">#</th> #}
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Nom du logement</th>
+                    <th>Image du logement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if sejours is not null %}
+                    {% for sejour in sejours %}
+                        <tr class="text-center">
+                            <td>{{ sejour.voyageur.nom }}</td>
+                            <td>{{ sejour.voyageur.prenom }}</td>
+                            <td>{{ sejour.logement.nom }}</td>
+                            {% if sejour.logement.photo is not empty %}
+                                <td><img style="width: 80px; height: 70px;" src="{{asset('uploads/photo/'~ sejour.logement.photo )}}" alt="photo"></td>
+                            {% else %}
+                                <td>non trouvé</td>                        
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                {% else %} 
+                    <td colspan="7">Indiquez l'option svp </td>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {# {{ include('sejour/_modal_delete.html.twig') }}
+    <script src="{{ asset('js/supprimermodal.js') }}"></script> #}
+
+{% endblock %}

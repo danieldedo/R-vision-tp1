@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+    
+{% block title %}Voyageur index{% endblock %}
+
+{% block body %}
+    
+    <div class="container mt-4">
+        <h1>Liste des voyageurs</h1>
+        <a class="btn btn-primary mb-2" href="{{ path('app_voyageur_new') }}">+Create new</a>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <table class="table my-1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Ville</th>
+                    <th>Region</th>
+                    <th>Sexe</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for voyageur in voyageurs %}
+                <tr>
+                    <td>{{ voyageur.id }}</td>
+                    <td>{{ voyageur.nom }}</td>
+                    <td>{{ voyageur.prenom }}</td>
+                    <td>{{ voyageur.ville }}</td>
+                    <td>{{ voyageur.region }}</td>
+                    <td>{{ voyageur.sexe }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('app_voyageur_edit', {'id': voyageur.id}) }}">Modifier</a>
+                        <button type="button" class="btn btn-danger supprimervoyageur" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ voyageur.id }}">Supprimer</button>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(voyageurs) }}
+        </div>
+   </div>
+
+   {{ include('_modal_delete.html.twig') }}
+   <script src="{{ asset('js/supprimermodal.js') }}"></script>
+{% endblock %}

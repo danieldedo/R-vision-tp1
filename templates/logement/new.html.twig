@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+   
+
+    <div class="container">
+       <div class="row mt-5">
+            <a class="btn btn-primary offset-10 col-md-2" href="{{ path('app_logement_index') }}">Retour a la liste</a>
+            {{ include('logement/_form.html.twig') }}
+       </div>
+    </div>
+{% endblock %}
